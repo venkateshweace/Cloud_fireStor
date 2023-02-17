@@ -46,7 +46,7 @@ exports.restoreCollect = functions.https.onCall((data) => {
   const todayDate = new Date().toISOString().slice(0, 2);
   console.log("daata date", todayDate);
   admin.firestore().collection("collect").doc(data.todayDate).collection("data").limit(1).get().then((docs) => {
-    // Get all the data from each documents
+    // Get all the data from each documents restore
     // console.log("data docs", JSON.stringify(docs.data().collect));
     // const collectdata = JSON.stringify(docs.data());
     docs.forEach((doc) => {
