@@ -94,8 +94,8 @@ exports.backupLocations = functions.https.onCall((data) => {
     });
     const Backups={
       "Date": todayDate,
-      "Entity": "Location",
-      "Total Datas": location.length,
+      "Object": "Location",
+      "No Of Records": location.length,
     };
     const BackupDocref=db.collection("Backups").doc();
     batch.set(BackupDocref, Backups);

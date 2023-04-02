@@ -49,8 +49,8 @@ exports.backupPricelist = functions.https.onCall((data) => {
     });
     const Backups={
       "Date": todayDate,
-      "Entity": "Pricelists",
-      "Total Datas": datalist.length,
+      "Object": "Pricelists",
+      "No Of Records": datalist.length,
     };
     const BackupDocref=db.collection("Backups").doc();
     batch.set(BackupDocref, Backups);

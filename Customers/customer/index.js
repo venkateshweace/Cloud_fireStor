@@ -33,8 +33,8 @@ exports.backupCustomers = functions.https.onCall((data) => {
     });
     const Backups={
       "Date": todayDate,
-      "Entity": "Customer",
-      "Total Datas": data.customers.length,
+      "Object": "Customer",
+      "No Of Records": data.customers.length,
     };
     const BackupDocref=db.collection("Backups").doc();
     batch.set(BackupDocref, Backups);

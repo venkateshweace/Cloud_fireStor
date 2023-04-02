@@ -35,8 +35,8 @@ exports.backupCustomerAddress = functions.https.onCall((data) => {
     });
     const Backups={
       "Date": todayDate,
-      "Entity": "CustomerAddress",
-      "Total Datas": data.customer_address.length,
+      "Object": "CustomerAddress",
+      "No Of Records": data.customer_address.length,
     };
     const BackupDocref=db.collection("Backups").doc();
     batch.set(BackupDocref, Backups);

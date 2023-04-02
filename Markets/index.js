@@ -54,8 +54,8 @@ exports.backupMarkets = functions.https.onCall((data) => {
     });
     const Backups={
       "Date": todayDate,
-      "Entity": "Markets",
-      "Total Datas": dataparse.length,
+      "Object": "Markets",
+      "No Of Records": dataparse.length,
     };
     const BackupDocref=db.collection("Backups").doc();
     batch.set(BackupDocref, Backups);

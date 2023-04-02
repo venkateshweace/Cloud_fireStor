@@ -52,8 +52,8 @@ exports.backupMetafield = functions.https.onCall((data) => {
     });
     const Backups={
       "Date": todayDate,
-      "Entity": ownerType+" "+"metaField",
-      "Total Datas": dataval.length,
+      "Object": ownerType+"-"+"metaField",
+      "No Of Records": dataval.length,
     };
     const BackupDocref=db.collection("Backups").doc();
     batch.set(BackupDocref, Backups);

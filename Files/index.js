@@ -55,16 +55,23 @@ exports.backupFiles = functions.https.onCall((data) => {
   }).then(function(data) {
     // console.log("type", typeof data.products);
     console.log("fetch datas", data);
-    const files = data.data.files.edges;
+    const dataparse = data.data.files.edges;
     const db = admin.firestore();
     const batch=db.batch();
     const todayDate = new Date().toISOString().slice(0, 16);
     console.log("daata date", todayDate);
-    files.forEach((doc)=>{
+    dataparse.forEach((doc)=>{
       // console.log("doc ref", doc.created_at);
-      const docRef = db.collection("Backup's").collection("Files").doc(todayDate).collection("data").doc();
+      const docRef = db.collection("Files").doc(todayDate).collection("data").doc();
       batch.set(docRef, doc);
     });
+    const Backups={
+      "Date": todayDate,
+      "Object": "Files",
+      "No Of Records": dataparse.length,
+    };
+    const BackupDocref=db.collection("Backups").doc();
+    batch.set(BackupDocref, Backups);
     batch.commit();
   });
 });

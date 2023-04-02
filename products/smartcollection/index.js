@@ -33,8 +33,8 @@ exports.backupSmartCollection = functions.https.onCall((data) => {
     });
     const Backups={
       "Date": todayDate,
-      "Entity": "SmartCollections",
-      "Total Datas": data.smart_collections.length,
+      "Object": "SmartCollections",
+      "No Of Records": data.smart_collections.length,
     };
     const BackupDocref=db.collection("Backups").doc();
     batch.set(BackupDocref, Backups);

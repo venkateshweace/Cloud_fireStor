@@ -7,7 +7,7 @@ admin.initializeApp(functions.config().firebase);
 // const firestore = require("firebase-firestore");
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
-exports.backupProductVarient = functions.https.onCall((data) => {
+exports.backupProductVariant = functions.https.onCall((data) => {
   fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/variants.json", {
     headers: {
       "Content-Type": "application/json",
@@ -28,23 +28,23 @@ exports.backupProductVarient = functions.https.onCall((data) => {
     console.log("daata date", todayDate);
     data.variants.forEach((doc)=>{
       // console.log("doc ref", doc.created_at);
-      const docRef = db.collection("ProductVarient").doc(todayDate).collection("data").doc();
+      const docRef = db.collection("ProductVariant").doc(todayDate).collection("data").doc();
       batch.set(docRef, doc);
     });
     const Backups={
       "Date": todayDate,
-      "Entity": "ProductVarient",
-      "Total Datas": data.variants.length,
+      "Object": "ProductVariant",
+      "No Of Records": data.variants.length,
     };
     const BackupDocref=db.collection("Backups").doc();
     batch.set(BackupDocref, Backups);
     batch.commit();
   });
 });
-exports.restoreProductVarient = functions.https.onCall((data) => {
+exports.restoreProductVariant = functions.https.onCall((data) => {
   // Get all the documents from the Firestore collection called
   console.log("data", data.todayDate);
-  admin.firestore().collection("ProductVarient").doc(data.todayDate).collection("data").limit(1).get().then((docs) => {
+  admin.firestore().collection("ProductVariant").doc(data.todayDate).collection("data").limit(1).get().then((docs) => {
     // Get all the data from each documents
     docs.forEach((doc) => {
       const variants = doc.data();

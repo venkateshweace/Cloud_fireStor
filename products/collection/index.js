@@ -5,7 +5,7 @@ const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
-exports.backUpCollection = functions.https.onCall((data) => {
+exports.backupCollection = functions.https.onCall((data) => {
   fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/collections/276637319268/products.json", {
     headers: {
       "Content-Type": "application/json",
@@ -31,8 +31,8 @@ exports.backUpCollection = functions.https.onCall((data) => {
     });
     const Backups={
       "Date": todayDate,
-      "Entity": "Collection",
-      "Total Datas": data.products.length,
+      "Object": "Collection",
+      "No Of Records": data.products.length,
     };
     const BackupDocref=db.collection("Backups").doc();
     batch.set(BackupDocref, Backups);
