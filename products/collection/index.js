@@ -43,7 +43,7 @@ exports.restoreCollection = functions.https.onCall((data) => {
   // Get all the documents from the Firestore collection called
   console.log("data", data.todayDate);
   // eslint-disable-next-line max-len
-  admin.firestore().collection("Collection").doc(data.todayDate).collection("data").limit(1).get().then((docs) => {
+  admin.firestore().collection("Collection").doc(data.todayDate).collection("data").limit(3).get().then((docs) => {
     // Get all the data from each documents
     docs.forEach((doc) => {
       const collection = doc.data();

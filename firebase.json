@@ -38,7 +38,8 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    }, {
+    },
+    {
       "source": "products/collect",
       "codebase": "collect",
       "ignore": [
@@ -76,7 +77,8 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    },{
+    },
+    {
       "source": "products/productvariant",
       "codebase": "productvariant",
       "ignore": [
@@ -88,7 +90,8 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    },{
+    },
+    {
       "source": "Billing/applicationcharge",
       "codebase": "applicationcharge",
       "ignore": [
@@ -100,7 +103,8 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    },{
+    },
+    {
       "source": "Billing/applicationcredit",
       "codebase": "applicationcredit",
       "ignore": [
@@ -138,7 +142,8 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    },{
+    },
+    {
       "source": "Customers/customeraddress",
       "codebase": "customeraddress",
       "ignore": [
@@ -215,7 +220,8 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    },{
+    },
+    {
       "source": "markets",
       "codebase": "markets",
       "ignore": [
@@ -266,7 +272,8 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    },{
+    },
+    {
       "source": "dellivery",
       "codebase": "dellivery",
       "ignore": [
@@ -278,7 +285,8 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    },{
+    },
+    {
       "source": "location",
       "codebase": "location",
       "ignore": [
@@ -290,7 +298,8 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    },{
+    },
+    {
       "source": "draftorder",
       "codebase": "draftorder",
       "ignore": [
@@ -302,9 +311,49 @@
       "predeploy": [
         "npm --prefix \"$RESOURCE_DIR\" run lint"
       ]
-    },{
+    },
+    {
       "source": "giftcards",
       "codebase": "giftcards",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    },
+    {
+      "source": "backupall",
+      "codebase": "backupall",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    },
+    {
+      "source": "tenantid/tenant",
+      "codebase": "tenant",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run lint"
+      ]
+    },
+    {
+      "source": "userid/user",
+      "codebase": "user",
       "ignore": [
         "node_modules",
         ".git",

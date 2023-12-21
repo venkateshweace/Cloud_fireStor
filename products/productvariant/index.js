@@ -8,6 +8,7 @@ admin.initializeApp(functions.config().firebase);
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.backupProductVariant = functions.https.onCall((data) => {
+  const shopifyId = "ariztar-sandbox";
   fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/variants.json", {
     headers: {
       "Content-Type": "application/json",
@@ -28,7 +29,8 @@ exports.backupProductVariant = functions.https.onCall((data) => {
     console.log("daata date", todayDate);
     data.variants.forEach((doc)=>{
       // console.log("doc ref", doc.created_at);
-      const docRef = db.collection("ProductVariant").doc(todayDate).collection("data").doc();
+      const docRef = db.collection().doc(todayDate).collection("data").doc();
+      db.collection(shopifyId).doc("data").collection("ProductVariant").doc(todayDate).collection("data").doc();
       batch.set(docRef, doc);
     });
     const Backups={

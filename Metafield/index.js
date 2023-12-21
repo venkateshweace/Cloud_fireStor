@@ -9,6 +9,10 @@ admin.initializeApp(functions.config().firebase);
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.backupMetafield = functions.https.onCall((data) => {
+  console.log("data5", data);
+  const ShopifyId = data.tenant.ShopifyId;
+  console.log("shopify4", ShopifyId);
+  const ShopifyToken = data.tenant.ShopifyToken;
   const ownerType = data.ownerType;
   console.log("my qwnertype", ownerType);
   const query = `{
@@ -25,12 +29,15 @@ exports.backupMetafield = functions.https.onCall((data) => {
   }
 }`;
   console.log("query", query);
-  fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/graphql.json", {
+  const url = `https://${ShopifyId}.myshopify.com/admin/api/2022-10/graphql.json`;
+  console.log("urls", url);
+  console.log("token", ShopifyToken);
+  fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/graphql",
       // eslint-disable-next-line camelcase, no-undef
-      "X-Shopify-Access-Token": "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",
+      "X-Shopify-Access-Token": ShopifyToken,
     },
     body: query,
   }).then(function(response) {
@@ -47,7 +54,7 @@ exports.backupMetafield = functions.https.onCall((data) => {
     console.log("daata date", todayDate);
     dataval.forEach((doc)=>{
       // console.log("doc ref", doc.created_at);
-      const docRef = db.collection("Metafield").doc(ownerType).collection(todayDate).doc();
+      const docRef = db.collection(ShopifyId).doc("data").collection("Metafield").doc(ownerType).collection(todayDate).doc();
       batch.set(docRef, doc);
     });
     const Backups={
@@ -55,16 +62,22 @@ exports.backupMetafield = functions.https.onCall((data) => {
       "Object": ownerType+"-"+"metaField",
       "No Of Records": dataval.length,
     };
-    const BackupDocref=db.collection("Backups").doc();
+    const BackupDocref=db.collection(ShopifyId).doc("data").collection("Backups").doc();
     batch.set(BackupDocref, Backups);
     batch.commit();
   });
 });
 exports.restoreMetafield = functions.https.onCall((data) => {
+  console.log("data5", data);
+  const ShopifyId = data.tenant.ShopifyId;
+  console.log("shopify4", ShopifyId);
+  const ShopifyToken = data.tenant.ShopifyToken;
   // Get all the documents from the Firestore collection called
   console.log("data", data.todayDate);
-  const ownerType = data.ownerType;
-  admin.firestore().doc("Metafield").collection(ownerType).doc(data.todayDate).collection("data").limit(1).get().then((docs) => {
+  let ownerType = data.ownerType;
+  ownerType = ownerType.substring(0, ownerType.indexOf("-metaField"));
+  console.log("Owner Type", ownerType);
+  admin.firestore().collection(ShopifyId).doc("Metafield").collection(ownerType).doc(data.todayDate).collection("data").doc().limit(2).get().then((docs) => {
     // Get all the data from each documents
     docs.forEach((doc) => {
       const collect = doc.data();
@@ -79,12 +92,12 @@ exports.restoreMetafield = functions.https.onCall((data) => {
           ownerType
         }
       }`;
-      fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/graphql.json", {
+      fetch(`https://${ShopifyId}.myshopify.com/admin/api/2022-10/graphql.json`, {
         method: "POST",
         headers: {
           "Content-Type": "application/graphql",
           // eslint-disable-next-line camelcase, no-undef
-          "X-Shopify-Access-Token": "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",
+          "X-Shopify-Access-Token": ShopifyToken,
         },
         body: metadata,
       }).then(function(response) {
@@ -97,7 +110,7 @@ exports.restoreMetafield = functions.https.onCall((data) => {
         const definition = {
           "name": collect.name,
           "namespace": collect.namespace,
-          "key": collect.namespace,
+          "key": collect.key,
           "description": collect.description,
           "ownerType": collect.ownerType,
         };
@@ -127,12 +140,12 @@ exports.restoreMetafield = functions.https.onCall((data) => {
             },
           });
           console.log("my query", query);
-          fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/graphql.json", {
+          fetch(`https://${ShopifyId}.myshopify.com/admin/api/2022-10/graphql.json`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               // eslint-disable-next-line camelcase, no-undef
-              "X-Shopify-Access-Token": "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",
+              "X-Shopify-Access-Token": ShopifyToken,
             },
             body: graphql,
           }).then(function(response) {
@@ -170,12 +183,12 @@ exports.restoreMetafield = functions.https.onCall((data) => {
               definition,
             },
           });
-          fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/graphql.json", {
+          fetch(`https://${ShopifyId}.myshopify.com/admin/api/2022-10/graphql.json`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               // eslint-disable-next-line camelcase, no-undef
-              "X-Shopify-Access-Token": "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",
+              "X-Shopify-Access-Token": ShopifyToken,
             },
             body: creategraphql,
           }).then(function(response) {

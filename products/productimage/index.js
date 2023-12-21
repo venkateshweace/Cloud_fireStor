@@ -8,7 +8,7 @@ admin.initializeApp(functions.config().firebase);
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.backupProductImage = functions.https.onCall((data) => {
-  fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/products/7101512450148/images.json", {
+  fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/products/7202037235812/images.json", {
     headers: {
       "Content-Type": "application/json",
       // eslint-disable-next-line camelcase, no-undef

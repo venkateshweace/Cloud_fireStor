@@ -55,37 +55,37 @@ exports.backupGiftCards = functions.https.onCall((data) => {
     batch.commit();
   });
 });
-exports.restoreFiles = functions.https.onCall((data) => {
-  // Get all the documents from the Firestore collection called
-  admin.firestore().collection("Files").doc(data.todayDate).collection("data").limit(1).get().then((docs) => {
-    // Get all the data from each documents
-    docs.forEach((doc) => {
-      const collect = doc.data();
-      console.log("collect", collect);
-      const id = collect.node.id;
-      const metadata =`{
-          file (id:"${id}") {
-            id
-            name
-            currency
-          }
-        }`;
-      console.log("meta data", metadata);
-      fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/graphql.json", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/graphql",
-          // eslint-disable-next-line camelcase, no-undef
-          "X-Shopify-Access-Token": "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",
-        },
-        body: metadata,
-      }).then(function(response) {
-        const jsonObject = response.json();
-        return jsonObject;
-      }).then(function(data) {
-        console.log("data loading", data);
-      });
-    });
-  });
-});
+// exports.restoreFiles = functions.https.onCall((data) => {
+//   // Get all the documents from the Firestore collection called
+//   admin.firestore().collection("Files").doc(data.todayDate).collection("data").limit(1).get().then((docs) => {
+//     // Get all the data from each documents
+//     docs.forEach((doc) => {
+//       const collect = doc.data();
+//       console.log("collect", collect);
+//       const id = collect.node.id;
+//       const metadata =`{
+//           file (id:"${id}") {
+//             id
+//             name
+//             currency
+//           }
+//         }`;
+//       console.log("meta data", metadata);
+//       fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/graphql.json", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/graphql",
+//           // eslint-disable-next-line camelcase, no-undef
+//           "X-Shopify-Access-Token": "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",
+//         },
+//         body: metadata,
+//       }).then(function(response) {
+//         const jsonObject = response.json();
+//         return jsonObject;
+//       }).then(function(data) {
+//         console.log("data loading", data);
+//       });
+//     });
+//   });
+// });
 

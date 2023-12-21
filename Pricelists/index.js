@@ -8,6 +8,10 @@ admin.initializeApp(functions.config().firebase);
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.backupPricelist = functions.https.onCall((data) => {
+  console.log("data6", data);
+  const ShopifyId = data.tenant.ShopifyId;
+  console.log("shopify5", ShopifyId);
+  const ShopifyToken = data.tenant.ShopifyToken;
   const query =`{
     priceLists(first:2){
       nodes{
@@ -21,12 +25,15 @@ exports.backupPricelist = functions.https.onCall((data) => {
     query,
   });
   console.log("query", query);
-  fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/graphql.json", {
+  const url = `https://${ShopifyId}.myshopify.com/admin/api/2022-10/graphql.json`;
+  console.log("urls", url);
+  console.log("token", ShopifyToken);
+  fetch(url, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/graphql",
       // eslint-disable-next-line camelcase, no-undef
-      "X-Shopify-Access-Token": "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",
+      "X-Shopify-Access-Token": ShopifyToken,
     },
     body: graphql,
   }).then(function(response) {
@@ -44,7 +51,7 @@ exports.backupPricelist = functions.https.onCall((data) => {
     console.log("daata date", todayDate);
     datalist.forEach((doc)=>{
       // console.log("doc ref", doc.created_at);
-      const docRef = db.collection("Pricelists").doc(todayDate).collection("data").doc();
+      const docRef = db.collection(ShopifyId).doc("data").collection("Pricelists").doc(todayDate).collection("data").doc();
       batch.set(docRef, doc);
     });
     const Backups={
@@ -52,7 +59,7 @@ exports.backupPricelist = functions.https.onCall((data) => {
       "Object": "Pricelists",
       "No Of Records": datalist.length,
     };
-    const BackupDocref=db.collection("Backups").doc();
+    const BackupDocref=db.collection(ShopifyId).doc("data").collection("Backups").doc();
     batch.set(BackupDocref, Backups);
     batch.commit();
   });

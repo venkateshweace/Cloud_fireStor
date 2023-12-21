@@ -8,6 +8,10 @@ admin.initializeApp(functions.config().firebase);
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.backupCollect = functions.https.onCall((data) => {
+  console.log("data10", data);
+  const ShopifyId = data.tenant.ShopifyId;
+  console.log("shopify9", ShopifyId);
+  const ShopifyToken = data.tenant.ShopifyToken;
   fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/collects.json", {
     headers: {
       "Content-Type": "application/json",
@@ -27,7 +31,8 @@ exports.backupCollect = functions.https.onCall((data) => {
     const todayDate = new Date().toISOString().slice(0, 16);
     console.log("daata date", todayDate);
     data.collects.forEach((doc)=>{
-      const docRef = db.collection("collect").doc(todayDate).collection("data").doc();
+      const docRef = db.collection(ShopifyToken).doc("data").collection("collect").doc(todayDate).collection("data").doc();
+
       batch.set(docRef, doc);
     });
     const Backups={
@@ -35,7 +40,7 @@ exports.backupCollect = functions.https.onCall((data) => {
       "Object": "Product Collect",
       "No Of Records": data.collects.length,
     };
-    const BackupDocref=db.collection("Backups").doc();
+    const BackupDocref=db.collection(ShopifyId).doc("data").collection("Backups").doc();
     batch.set(BackupDocref, Backups);
     batch.commit();
   });
@@ -45,7 +50,7 @@ exports.restoreCollect = functions.https.onCall((data) => {
   // console.log("data", data.todayDate);
   const todayDate = new Date().toISOString().slice(0, 2);
   console.log("daata date", todayDate);
-  admin.firestore().collection("collect").doc(data.todayDate).collection("data").limit(1).get().then((docs) => {
+  admin.firestore().collection("collect").doc(data.todayDate).collection("data").limit(3).get().then((docs) => {
     // Get all the data from each documents restore
     // console.log("data docs", JSON.stringify(docs.data().collect));
     // const collectdata = JSON.stringify(docs.data());

@@ -8,11 +8,18 @@ admin.initializeApp(functions.config().firebase);
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.backupSmartCollection = functions.https.onCall((data) => {
-  fetch("https://ariztar-sandbox.myshopify.com/admin/api/2022-10/smart_collections.json", {
+  console.log("data3", data);
+  const ShopifyId = data.tenant.ShopifyId;
+  console.log("shopify2", ShopifyId);
+  const ShopifyToken = data.tenant.ShopifyToken;
+  const url = `https://${ShopifyId}.myshopify.com/admin/api/2022-10/smart_collections.json`;
+  console.log("urls", url);
+  console.log("token", ShopifyToken);
+  fetch(url, {
     headers: {
       "Content-Type": "application/json",
       // eslint-disable-next-line camelcase, no-undef
-      "X-Shopify-Access-Token": "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",
+      "X-Shopify-Access-Token": ShopifyToken,
     },
   }).then(function(response) {
     const jsonObject = response.json();
@@ -28,7 +35,7 @@ exports.backupSmartCollection = functions.https.onCall((data) => {
     console.log("daata date", todayDate);
     data.smart_collections.forEach((doc)=>{
       // console.log("doc ref", doc.created_at);
-      const docRef = db.collection("SmartCollections").doc(todayDate).collection("data").doc();
+      const docRef = db.collection(ShopifyId).doc("data").collection("SmartCollections").doc(todayDate).collection("data").doc();
       batch.set(docRef, doc);
     });
     const Backups={
@@ -36,7 +43,7 @@ exports.backupSmartCollection = functions.https.onCall((data) => {
       "Object": "SmartCollections",
       "No Of Records": data.smart_collections.length,
     };
-    const BackupDocref=db.collection("Backups").doc();
+    const BackupDocref=db.collection(ShopifyId).doc("data").collection("Backups").doc();
     batch.set(BackupDocref, Backups);
     batch.commit();
   });
@@ -44,7 +51,7 @@ exports.backupSmartCollection = functions.https.onCall((data) => {
 exports.restoreSmartCollection = functions.https.onCall((data) => {
   // Get all the documents from the Firestore collection called
   console.log("data", data.todayDate);
-  admin.firestore().collection("SmartCollections").doc(data.todayDate).collection("data").limit(1).get().then((docs) => {
+  admin.firestore().collection("SmartCollections").doc(data.todayDate).collection("data").limit(14).get().then((docs) => {
     // Get all the data from each documents
     docs.forEach((doc) => {
       const SmartCollection = doc.data();
@@ -98,7 +105,7 @@ exports.restoreSmartCollection = functions.https.onCall((data) => {
             const jsonObject = response.json();
             return jsonObject;
           }).then(function(val) {
-            // console.log("Created a Datas", val);
+            console.log("Created a Datas", val);
           });
         }
       });

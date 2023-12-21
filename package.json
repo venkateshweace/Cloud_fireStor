@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@shopify/shopify-api": "^6.0.2"
+    "@shopify/shopify-api": "^6.0.2",
+    "firebase-functions": "^4.4.1"
   }
 }

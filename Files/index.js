@@ -8,6 +8,10 @@ admin.initializeApp(functions.config().firebase);
 // Create and Deploy Your First Cloud Functions
 // https://firebase.google.com/docs/functions/write-firebase-functions
 exports.backupFiles = functions.https.onCall((data) => {
+  console.log("data8", data);
+  const ShopifyId = data.tenant.ShopifyId;
+  console.log("shopify7", ShopifyId);
+  const ShopifyToken = data.tenant.ShopifyToken;
   const query =`{
     files(first: 2) {
       edges {
@@ -45,7 +49,7 @@ exports.backupFiles = functions.https.onCall((data) => {
     headers: {
       "Content-Type": "application/json",
       // eslint-disable-next-line camelcase, no-undef
-      "X-Shopify-Access-Token": "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",
+      "X-Shopify-Access-Token": ShopifyToken,
     },
     body: graphql,
   }).then(function(response) {
@@ -62,7 +66,8 @@ exports.backupFiles = functions.https.onCall((data) => {
     console.log("daata date", todayDate);
     dataparse.forEach((doc)=>{
       // console.log("doc ref", doc.created_at);
-      const docRef = db.collection("Files").doc(todayDate).collection("data").doc();
+      const docRef = db.collection(ShopifyId).doc("data").collection("Files").doc(todayDate).collection("data").doc();
+
       batch.set(docRef, doc);
     });
     const Backups={
@@ -70,7 +75,7 @@ exports.backupFiles = functions.https.onCall((data) => {
       "Object": "Files",
       "No Of Records": dataparse.length,
     };
-    const BackupDocref=db.collection("Backups").doc();
+    const BackupDocref=db.collection(ShopifyId).doc("data").collection("Backups").doc();
     batch.set(BackupDocref, Backups);
     batch.commit();
   });
